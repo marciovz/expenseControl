@@ -9,5 +9,8 @@
   },
   "keywords": [],
   "author": "MVZimmermann",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2"
+  }
 }
