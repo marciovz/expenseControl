@@ -1,15 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
 
 const expenseRouter = require('./routes/expenseRouter');
+
+let app = express();
 
 // config app
 app.set('port', 3000);
 app.use(bodyParser.json());
 
 
-// call routes
+// Define routes
 app.use('/expense', expenseRouter);
 
 
