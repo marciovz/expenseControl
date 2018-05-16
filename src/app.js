@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const authRouter = require('./routes/authRouter');
 const expenseRouter = require('./routes/expenseRouter');
 
 let app = express();
@@ -11,6 +12,7 @@ app.use(bodyParser.json());
 
 
 // Define routes
+app.use('/auth', authRouter);
 app.use('/expense', expenseRouter);
 
 
