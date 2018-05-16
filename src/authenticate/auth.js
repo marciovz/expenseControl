@@ -2,9 +2,10 @@ const jwt = require('jsonwebtoken');
 
 const secret = "0123456789";
 
+
 const generateToken = (params = {}) => {
   return jwt.sign(params, secret, {
-    expiresIn: 3600,  //1horas
+    expiresIn: 86400,
   });
 }
 
@@ -19,6 +20,18 @@ const auth  = {
       return null;
 
     return generateToken({ id: user.id });
+  },
+
+  authenticate: (req, res, next) => {
+    if(!req.headers.token)
+      return res.status(401).json({ "error": "Unauthorized" });
+
+    let { token } = req.headers;
+
+    jwt.verify(token, secret, (err, decoded) => {
+      if(err) return res.status(401).json({ error: "Unauthorized" });
+      return next();
+    });
   }
 
 }
