@@ -1,13 +1,9 @@
 const db = require('../database/db');
 
 const schema = db.Schema({
-  account: {
-    type: Number,
-    required: true
-  },
   provider: {
     type: String,
-    required: false
+    required: true
   },
   type: {
     type: String,
