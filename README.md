@@ -10,15 +10,15 @@
 
 ### What is it? #
 
->Expense control is an API that providers management of your expenses in the form of services.
+>Expense control is an API that either provides services for managing your expenses
 
 ### How to use it?
 
-*Note: This project is under development, so some of its features may be unavailable our not working properly. It is recommended for testing purposes only.*
+*Note: This project is under development, so some of its features may be unavailable or not working properly. It is recommended for testing purposes only.*
 
 #### Download
 
-> Clone or download teh project files to a folder an your local machine
+> Clone or download the project files to a folder on your local machine
 
 #### Configurations
 
@@ -39,7 +39,7 @@
 
 #### Use
 
-*Note: Your can develop your own interface or use other API`s request software*
+*Note: Your can develop your own interface or use other software to make the API requests*
 
 > Below we find example of accessing the API using curl commands
 
