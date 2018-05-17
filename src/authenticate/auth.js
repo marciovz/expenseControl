@@ -1,11 +1,9 @@
 const jwt = require('jsonwebtoken');
-
-const secret = "0123456789";
-
+const authConfig = require('../config/auth.json');
 
 const generateToken = (params = {}) => {
-  return jwt.sign(params, secret, {
-    expiresIn: 86400,
+  return jwt.sign(params, authConfig.secret, {
+    expiresIn: authConfig.expiresToken,
   });
 }
 
@@ -28,7 +26,7 @@ const auth  = {
 
     let { token } = req.headers;
 
-    jwt.verify(token, secret, (err, decoded) => {
+    jwt.verify(token, authConfig.secret, (err, decoded) => {
       if(err) return res.status(401).json({ error: "Unauthorized" });
       return next();
     });
