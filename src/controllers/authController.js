@@ -1,5 +1,6 @@
 const { login } = require('../authenticate/auth');
-const User = require('../models/user');
+const AccountModel = require('../models/account');
+const UserModel = require('../models/user');
 
 
 const authController = {
@@ -9,7 +10,7 @@ const authController = {
     if(!email || !password)
       return res.status(401).json({ "error": "bad requisition" });
 
-    User.findOne({ "email": email })
+    UserModel.findOne({ "email": email })
       .then(user => {
         if(!user)
           return res.status(401).json({ "error": "User not found" });
@@ -28,24 +29,52 @@ const authController = {
   register: (req, res) => {
     const { name, email, password } = req.body;
     if(!name || !email || !password)
-      return res.status(401).json({ "error": "bad requisition" });
+      return res.status(401).json({ "registerError": "bad requisition" });
 
-    User.findOne({ email })
+    UserModel.findOne({ email })
       .then(user => {
         if(user)
-          return res.status(401).json({ "error": "User already registered" });
+          throw new Error("User already registered");
 
-        new User({ name, email, password })
+        return new AccountModel()
+          .save()
+          .then(account => {
+            return account;
+          })
+          .catch(err => {
+            throw new Error("Could not create a new account");
+          });
+      })
+      .then(account => {
+        return new UserModel({ accountId: account.id, name, email, password })
           .save()
           .then(user => {
+            let result = {};
+            result.account = account;
+            result.user = user;
+            return result;
+          })
+          .catch(err => {
+            throw new Error("Could not create a new user");
+          });
+      })
+      .then(result => {
+        let {user, account} = result;
+        AccountModel.findByIdAndUpdate(account.id, { userId: user.id })
+          .then(account => {
+            user.accountId = undefined;
             user.password = undefined;
             return res.json(user);
           })
-          .catch(err => res.status(401).json({ "error": "Could not create a new user" }));
+          .catch(err => {
+            throw new Error("Could not update a new account");
+          });
       })
-      .catch(err => res.status(401).json({ "error": "User verification" }));
+      .catch(err =>{
+        console.log(err);
+        res.status(401).json({ "registerError": err.message });
+      });
   }
-
 };
 
 module.exports = authController;
