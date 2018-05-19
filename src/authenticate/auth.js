@@ -17,7 +17,10 @@ const auth  = {
     if (user.password !== password)
       return null;
 
-    return generateToken({ id: user.id });
+    if(!user.id || !user.accountId)
+      return null;
+
+    return generateToken({ userId: user.id, accountId: user.accountId });
   },
 
   authenticate: (req, res, next) => {
@@ -28,10 +31,12 @@ const auth  = {
 
     jwt.verify(token, authConfig.secret, (err, decoded) => {
       if(err) return res.status(401).json({ error: "Unauthorized" });
+      req.auth = {};
+      req.auth.userId = decoded.userId;
+      req.auth.accountId = decoded.accountId;
       return next();
     });
   }
-
 }
 
 module.exports = auth;

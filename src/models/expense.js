@@ -1,6 +1,10 @@
 const db = require('../database/db');
 
 const schema = db.Schema({
+  accountId: {
+    type: String,
+    required: true,
+  },
   provider: {
     type: String,
     required: true
@@ -24,7 +28,7 @@ const schema = db.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  },
+  }
 });
 
 
